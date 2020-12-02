@@ -3,8 +3,8 @@
 #include <random>
 #include "report.h"
 
-std::set<int, std::greater<int>> randomSet(const int size) {
-  std::set<int, std::greater<int>> x;
+std::set<int> randomSet(const int size) {
+  std::set<int> x;
 
   std::default_random_engine generator;
   std::uniform_int_distribution<int> distribution(1, 32768);

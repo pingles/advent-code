@@ -27,20 +27,22 @@
 // so if we have the numbers ordered, can only iterate
 // the numbers smaller than inputs[i]
 
-std::tuple<int, int> target_pairs(const std::unordered_set<int> inputs,
+using std::tuple;
+
+tuple<int, int> target_pairs(const std::unordered_set<int> inputs,
                                   const int target) {
   // find pairs
   for (const int a : inputs) {
     const int b = target - a;
     if (inputs.find(b) != inputs.end()) {
-      return std::tuple<int, int>(a, b);
+      return tuple<int, int>(a, b);
     }
   }
-  return std::tuple<int, int>();
+  return tuple<int, int>();
 }
 
-std::tuple<int, int, int> target_trios(
-    const std::set<int, std::greater<int>> inputs, const int target) {
+tuple<int, int, int> target_trios(
+    const std::set<int> inputs, const int target) {
   auto a = inputs.begin();
   while (a != inputs.end()) {
     // inner loop starts at outer+1
@@ -50,7 +52,7 @@ std::tuple<int, int, int> target_trios(
       // check whether val = 2020 - a - b is present
       auto it = target - *a - *b;
       if (inputs.find(it) != inputs.end()) {
-        return std::tuple<int, int, int>(*a, *b, it);
+        return tuple<int, int, int>(*a, *b, it);
       }
       b++;
     }
@@ -58,5 +60,5 @@ std::tuple<int, int, int> target_trios(
     a++;
   }
 
-  return std::tuple<int, int, int>();
+  return tuple<int, int, int>();
 }
