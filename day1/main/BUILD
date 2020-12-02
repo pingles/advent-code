@@ -8,13 +8,13 @@ cc_library(
 cc_binary(
     name = "report_bench",
     srcs = ["report_benchmark.cc"],
-    deps = ["//main:report",
+    deps = ["//day1/main:report",
         "@benchmark//:benchmark_main"],
 )
 
 cc_test(
     name = "report_test",
     srcs = ["report_test.cc"],
-    deps = ["//main:report",
+    deps = ["//day1/main:report",
            "@googletest//:gtest_main"],
 )

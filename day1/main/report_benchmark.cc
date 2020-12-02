@@ -5,7 +5,7 @@
 
 namespace day1 {
 
-set<int> randomSet(const int size) {
+std::set<int> randomSet(const int size) {
   std::set<int> x;
 
   std::default_random_engine generator;
@@ -29,5 +29,6 @@ static void BM_target_trios(benchmark::State& state) {
 }
 
 BENCHMARK(BM_target_trios)->RangeMultiplier(2)->Range(8, 8 << 12)->Complexity();
-BENCHMARK_MAIN();
 }  // namespace day1
+
+BENCHMARK_MAIN();
