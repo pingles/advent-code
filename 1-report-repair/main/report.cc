@@ -1,8 +1,9 @@
-#import <iostream>
-#import "report.h"
+#include "report.h"
+#include <set>
 
 // Our input will be a file containing a list of unsorted numbers.
-// We need to find two entries that sum to 2020, multiply them, and return the value.
+// We need to find two entries that sum to 2020, multiply them, and return the
+// value.
 //
 // Simple:
 // We compare each number against each other number, this would be O(n^2)
@@ -26,34 +27,36 @@
 // so if we have the numbers ordered, can only iterate
 // the numbers smaller than inputs[i]
 
-std::tuple<int,int> target_pairs(const std::unordered_set<int> inputs, const int target) {
-    // find pairs
-    for (const int a : inputs) {
-        const int b = target - a;
-        if (inputs.find(b) != inputs.end()) {
-            return std::tuple<int,int>(a,b);
-        }
+std::tuple<int, int> target_pairs(const std::unordered_set<int> inputs,
+                                  const int target) {
+  // find pairs
+  for (const int a : inputs) {
+    const int b = target - a;
+    if (inputs.find(b) != inputs.end()) {
+      return std::tuple<int, int>(a, b);
     }
-
-    return std::tuple<int,int>();
+  }
+  return std::tuple<int, int>();
 }
 
-std::tuple<int,int,int> target_trios(const std::set<int,std::greater<int>> inputs, const int target) {
-    auto a = inputs.begin();
-    while (a != inputs.end()) {
-        // inner loop starts at outer+1
-        auto b = a++;
-        while (b != inputs.end()) {
-            // 2020 > a > b
-            // check whether val = 2020 - a - b is present
-            auto it = target - *a - *b;
-            if (inputs.find(it) != inputs.end()) {
-                return std::tuple<int,int,int>(*a, *b, it);
-            }
-            b++;
-        }
-        a++;
+std::tuple<int, int, int> target_trios(
+    const std::set<int, std::greater<int>> inputs, const int target) {
+  auto a = inputs.begin();
+  while (a != inputs.end()) {
+    // inner loop starts at outer+1
+    auto b = a++;
+    while (b != inputs.end()) {
+      // 2020 > a > b
+      // check whether val = 2020 - a - b is present
+      auto it = target - *a - *b;
+      if (inputs.find(it) != inputs.end()) {
+        return std::tuple<int, int, int>(*a, *b, it);
+      }
+      b++;
     }
 
-    return std::tuple<int,int,int>();
+    a++;
+  }
+
+  return std::tuple<int, int, int>();
 }
