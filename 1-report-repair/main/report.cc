@@ -27,10 +27,11 @@
 // so if we have the numbers ordered, can only iterate
 // the numbers smaller than inputs[i]
 
+namespace day1 {
 using std::tuple;
 
 tuple<int, int> target_pairs(const std::unordered_set<int> inputs,
-                                  const int target) {
+                             const int target) {
   // find pairs
   for (const int a : inputs) {
     const int b = target - a;
@@ -41,8 +42,8 @@ tuple<int, int> target_pairs(const std::unordered_set<int> inputs,
   return tuple<int, int>();
 }
 
-tuple<int, int, int> target_trios(
-    const std::set<int> inputs, const int target) {
+tuple<int, int, int> target_trios(const std::set<int> inputs,
+                                  const int target) {
   auto a = inputs.begin();
   while (a != inputs.end()) {
     // inner loop starts at outer+1
@@ -62,3 +63,5 @@ tuple<int, int, int> target_trios(
 
   return tuple<int, int, int>();
 }
+
+}  // namespace day1

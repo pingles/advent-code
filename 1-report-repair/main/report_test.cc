@@ -1,6 +1,8 @@
 #include "report.h"
 #include "gtest/gtest.h"
 
+namespace day1 {
+
 TEST(report_test_pairs, simple) {
   auto input = std::unordered_set<int>{1721, 979, 366, 299, 675, 1456};
   auto r = target_pairs(input, 2020);
@@ -36,3 +38,5 @@ TEST(report_test_pairs, expanded) {
   EXPECT_EQ(241, std::get<1>(r));
   EXPECT_EQ(1568, std::get<2>(r));
 }
+
+}  // namespace day1
