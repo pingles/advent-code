@@ -25,4 +25,18 @@ TEST(passwords_test, simple) {
   ASSERT_EQ("abb", pa->value);
 }
 
+TEST(passwords_test, policy) {
+  std::istringstream sample("1-3 a: abb\n1-2 c: abb");
+  InputTokeniser t(&sample);
+
+  PolicyPtr po;
+  PasswordPtr pa;
+  t.next(po, pa);
+
+  ASSERT_EQ(true, pa->satisfies(po));
+
+  t.next(po, pa);
+  ASSERT_EQ(false, pa->satisfies(po));
+}
+
 }  // namespace day2

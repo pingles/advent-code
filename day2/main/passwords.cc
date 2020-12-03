@@ -26,4 +26,37 @@ bool InputTokeniser::next(PolicyPtr& policy, PasswordPtr& password) {
   return true;
 }
 
+void Password::buildIndex() {
+  for (const char& c : value) {
+    if (index->find(c) == index->end()) {
+      (*index)[c] = 1;
+    } else {
+      (*index)[c]++;
+    }
+  }
+}
+
+int Password::frequency(const char& c) {
+  auto val = index->find(c);
+  if (val == index->end()) {
+    return 0;
+  }
+  return val->second;
+}
+
+// determines if contents of password matches policy
+// expectation
+bool Password::satisfies(const PolicyPtr& policy) {
+  auto actual = frequency(policy->character);
+  if (actual == 0) {
+    return false;
+  }
+
+  if (actual < policy->minMax.first || actual > policy->minMax.second) {
+    return false;
+  }
+
+  return true;
+}
+
 }  // namespace day2

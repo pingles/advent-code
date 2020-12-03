@@ -11,3 +11,9 @@ cc_test(
     deps = ["//day2/main:passwords",
            "@googletest//:gtest_main"],
 )
+
+cc_binary(
+    name = "password_checker",
+    srcs = ["password_checker.cc"],
+    deps = ["//day2/main:passwords"],
+)

@@ -2,9 +2,10 @@
 #define PASSWORDS_H
 
 #include <iostream>
+#include <istream>
+#include <map>
 #include <memory>
 #include <regex>
-#include <sstream>
 #include <string>
 #include <utility>
 
@@ -19,22 +20,30 @@ class Policy {
   char character;
   std::pair<int, int> minMax;
 };
+typedef std::unique_ptr<Policy> PolicyPtr;
 
 class Password {
  public:
-  Password(std::string val) { value = val; }
-  bool satisfies(const Policy* policy);
+  Password(std::string val) {
+    value = val;
+    index = std::make_unique<std::map<char, int>>();
+    buildIndex();
+  }
+  bool satisfies(const PolicyPtr& policy);
 
   std::string value;
-};
 
-typedef std::unique_ptr<Policy> PolicyPtr;
+ private:
+  std::unique_ptr<std::map<char, int>> index;
+  int frequency(const char& c);
+  void buildIndex();
+};
 typedef std::unique_ptr<Password> PasswordPtr;
 
 // reads a string line
 class InputTokeniser {
  public:
-  InputTokeniser(std::istringstream* input) {
+  InputTokeniser(std::istream* input) {
     in = input;
     re = std::regex("(\\d+)\\-(\\d+)\\s([a-z]):\\s([a-z]+)");
   }
@@ -42,7 +51,7 @@ class InputTokeniser {
   bool next(PolicyPtr& policy, PasswordPtr& password);
 
  private:
-  std::istringstream* in;
+  std::istream* in;
   std::regex re;
 };
 
