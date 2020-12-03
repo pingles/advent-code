@@ -26,17 +26,10 @@ class Password {
  public:
   Password(std::string val) {
     value = val;
-    index = std::make_unique<std::map<char, int>>();
-    buildIndex();
   }
   bool satisfies(const PolicyPtr& policy);
 
   std::string value;
-
- private:
-  std::unique_ptr<std::map<char, int>> index;
-  int frequency(const char& c);
-  void buildIndex();
 };
 typedef std::unique_ptr<Password> PasswordPtr;
 

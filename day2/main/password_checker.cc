@@ -27,10 +27,9 @@ int main(int argc, char* argv[]) {
       validCount++;
       continue;
     }
-    std::cout << "FAIL: " << password->value << std::endl;
   }
 
-  std::cout << "---" << std::endl << validCount << std::endl;
+  std::cout << validCount << std::endl;
 
   return 0;
 }
