@@ -5,3 +5,4 @@ DerivePointerAlignment: false
 PointerAlignment: Left
 
 IncludeBlocks: Merge
+ColumnLimit: 0
