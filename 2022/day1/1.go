@@ -103,6 +103,9 @@ func main() {
 		elves.insert(sum(inputStack))
 	}
 
+	fmt.Println("Elves:")
+	fmt.Println(elves.length)
+
 	fmt.Println("Largest:")
 	fmt.Println(elves.start.val)
 
