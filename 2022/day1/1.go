@@ -22,33 +22,46 @@ type sortedLinkedList struct {
 // insert val in order so that the start of the list
 // is the largest number
 func (l *sortedLinkedList) insert(val int) {
-	n := &node{val: val}
+	newNode := &node{val: val}
+
+	// empty list
 	if l.length == 0 {
-		l.start = n
+		l.start = newNode
 		l.length++
 
 		return
 	}
 
-	indexNode := l.start
+	// do we need to replace the head
+	if newNode.val > l.start.val {
+		newNode.next = l.start
+		l.start = newNode
+		l.length++
+
+		return
+	}
+
+	// need to search for where the next node has
+	// a smaller value than newNode
+	node := l.start
 	for {
-		if l.length == 1 {
-			// if current start is smaller, put new node in front
-			if l.start.val < val {
-				n.next = l.start // put the old node as the next
-				l.start = n
-			}
+		if node.next == nil {
+			// we're at the tail
+			node.next = newNode
+			l.length++
 
-			break
+			return
 		}
 
-		// there's more than 1 node, so we need to find where we fit
-		// we need to find where indexNode > newNode > indexNode.next
-		if indexNode.val > val {
-			// we've found the "left" side of the list
-			n.next = indexNode.next
-			indexNode.next = n
+		if node.next.val < newNode.val {
+			newNode.next = node.next
+			node.next = newNode
+			l.length++
+
+			return
 		}
+
+		node = node.next
 	}
 }
 
