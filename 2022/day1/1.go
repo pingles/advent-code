@@ -26,6 +26,7 @@ func (l *sortedLinkedList) insert(val int) {
 	if l.length == 0 {
 		l.start = n
 		l.length++
+
 		return
 	}
 
@@ -53,16 +54,14 @@ func (l *sortedLinkedList) insert(val int) {
 
 var elves = &sortedLinkedList{}
 
-// appends calories in sorted order. means that we
-// don't need to perform a sort later.
-func appendTotalCaloriesForElfsItems(stack []int) {
-	calories := 0
+func sum(stack []int) int {
+	sum := 0
 
-	for _, food := range stack {
-		calories += food
+	for _, x := range stack {
+		sum += x
 	}
 
-	elves.insert(calories)
+	return sum
 }
 
 func main() {
@@ -77,7 +76,7 @@ func main() {
 
 		// if line is empty we've seen all the items for an elf
 		if textVal == "" {
-			appendTotalCaloriesForElfsItems(inputStack)
+			elves.insert(sum(inputStack))
 			inputStack = nil
 			continue
 		}
@@ -86,9 +85,10 @@ func main() {
 
 		inputStack = append(inputStack, val)
 	}
-	// input has finished but if there's still items on the stack
-	// there's one more elf
-	appendTotalCaloriesForElfsItems(inputStack)
+	// input has finished but process remaining stack
+	if len(inputStack) > 0 {
+		elves.insert(sum(inputStack))
+	}
 
 	fmt.Println("Largest:")
 	fmt.Println(elves.start.val)
