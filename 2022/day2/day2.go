@@ -26,17 +26,25 @@ const (
 	scissors = 2
 )
 
+func elfHandIndex(s string) int {
+	elfHands := map[string]int{
+		"A": rock,
+		"B": paper,
+		"C": scissors,
+	}
+
+	return elfHands[s]
+}
+
+func handScoreFromIndex(idx int) int {
+	return 1 + idx
+}
+
 func scoreRound(s string) int {
 	outcomes := [3][3]int{
 		{3, 6, 0},
 		{0, 3, 6},
 		{6, 0, 3},
-	}
-
-	elfHands := map[string]int{
-		"A": rock,
-		"B": paper,
-		"C": scissors,
 	}
 
 	playerHand := map[string]int{
@@ -46,21 +54,59 @@ func scoreRound(s string) int {
 	}
 
 	splits := strings.Split(s, " ")
-	elfHand := elfHands[splits[0]]
+	elfHand := elfHandIndex(splits[0])
 	meHand := playerHand[splits[1]]
 
 	outcomeScore := outcomes[elfHand][meHand]
-	handScore := 1 + meHand
-	
-	return outcomeScore + handScore
+
+	return outcomeScore + handScoreFromIndex(meHand)
+}
+
+// produces a score given a target outcome and elf hand
+func scoreHandToOutcome(s string) int {
+	outcomes := [3][3]int{
+		{3, 6, 0},
+		{0, 3, 6},
+		{6, 0, 3},
+	}
+
+	targetOutcomes := map[string]int{
+		"X": 0,
+		"Y": 3,
+		"Z": 6,
+	}
+
+	splits := strings.Split(s, " ")
+	elfHand := elfHandIndex(splits[0])
+	target := targetOutcomes[splits[1]]
+
+	// find the outcome given the elf's hand
+	for idx, score := range outcomes[elfHand] {
+		// our hand is the index we found the target outcome in
+		if score == target {
+			return score + handScoreFromIndex(idx)
+		}
+	}
+
+	return 0
 }
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+
+	// part 1
 	score := 0
+	//for scanner.Scan() {
+	//	line := scanner.Text()
+	//	score += scoreRound(line)
+	//}
+	//fmt.Printf("Score: %d\n", score)
+
+	// part 2
+	score = 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		score += scoreRound(line)
+		score += scoreHandToOutcome(line)
 	}
 	fmt.Printf("Score: %d\n", score)
 }
