@@ -7,62 +7,51 @@ import (
 	"strings"
 )
 
+// we can model the scores in a matrix
+//            Paper
+//        Rock     Scissors
+// e.g.     A   B   C
+//        X D   W   L
+//        Y L   D   W
+//        Z W   L   D
+//
+// "Our" hand is in the columns, so we find the cell for the result
+// in the extension, we're interested in finding the losing outcome
+// given the opposition, so we read from the row across to the losing
+// one and read up to the top
+
+const (
+	rock     = 0
+	paper    = 1
+	scissors = 2
+)
+
 func scoreRound(s string) int {
-	tokens := strings.Split(s, " ")
-
-	elf := tokens[0]
-	outcome := tokens[1]
-
-	// lose
-	if outcome == "X" {
-		// rock
-		if elf == "A" {
-			// losing hand to rock is scissors
-			return 3
-		}
-		// paper
-		if elf == "B" {
-			// losing hand is rock
-			return 1
-		}
-		// scissors
-		if elf == "C" {
-			// losing hand is paper
-			return 2
-		}
+	outcomes := [3][3]int{
+		{3, 6, 0},
+		{0, 3, 6},
+		{6, 0, 3},
 	}
 
-	// draw
-	if outcome == "Y" {
-		// hand value is the same as the elf
-		if elf == "A" {
-			return 3 + 1
-		}
-		if elf == "B" {
-			return 3 + 2
-		}
-		if elf == "C" {
-			return 3 + 3
-		}
+	elfHands := map[string]int{
+		"A": rock,
+		"B": paper,
+		"C": scissors,
 	}
 
-	// win
-	if outcome == "Z" {
-		if elf == "A" {
-			// winning hand against rock is paper
-			return 6 + 2
-		}
-		if elf == "B" {
-			// winning aginst paper is scissors
-			return 6 + 3
-		}
-		if elf == "C" {
-			// winning against scissors is rock
-			return 6 + 1
-		}
+	playerHand := map[string]int{
+		"X": rock,
+		"Y": paper,
+		"Z": scissors,
 	}
 
-	return 0
+	splits := strings.Split(s, " ")
+	elfHand := elfHands[splits[0]]
+	meHand := playerHand[splits[1]]
+
+	outcomeScore := outcomes[elfHand][meHand]
+
+	return outcomeScore + (1 + meHand)
 }
 
 func main() {
