@@ -40,35 +40,31 @@ func handScoreFromIndex(idx int) int {
 	return 1 + idx
 }
 
-func scoreRound(elf, player string) int {
+// get the potential outcomes given an elf hand
+func elfOutcomes(elf string) [3]int {
 	outcomes := [3][3]int{
 		{3, 6, 0},
 		{0, 3, 6},
 		{6, 0, 3},
 	}
 	elfHand := elfHandIndex(elf)
+	return outcomes[elfHand]
+}
 
+func scoreRound(elf, player string) int {
 	playerHand := map[string]int{
 		"X": rock,
 		"Y": paper,
 		"Z": scissors,
 	}
 	meHand := playerHand[player]
-
-	outcomeScore := outcomes[elfHand][meHand]
+	outcomeScore := elfOutcomes(elf)[meHand]
 
 	return outcomeScore + handScoreFromIndex(meHand)
 }
 
 // produces a score given a target outcome and elf hand
 func scoreHandToOutcome(elf, target string) int {
-	outcomes := [3][3]int{
-		{3, 6, 0},
-		{0, 3, 6},
-		{6, 0, 3},
-	}
-	elfHand := elfHandIndex(elf)
-
 	targetOutcomes := map[string]int{
 		"X": 0,
 		"Y": 3,
@@ -77,7 +73,7 @@ func scoreHandToOutcome(elf, target string) int {
 	targetScore := targetOutcomes[target]
 
 	// find the outcome given the elf's hand
-	for idx, score := range outcomes[elfHand] {
+	for idx, score := range elfOutcomes(elf) {
 		// our hand is the index we found the target outcome in
 		if score == targetScore {
 			return score + handScoreFromIndex(idx)
