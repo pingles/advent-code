@@ -40,22 +40,20 @@ func handScoreFromIndex(idx int) int {
 	return 1 + idx
 }
 
-func scoreRound(s string) int {
+func scoreRound(elf, player string) int {
 	outcomes := [3][3]int{
 		{3, 6, 0},
 		{0, 3, 6},
 		{6, 0, 3},
 	}
+	elfHand := elfHandIndex(elf)
 
 	playerHand := map[string]int{
 		"X": rock,
 		"Y": paper,
 		"Z": scissors,
 	}
-
-	splits := strings.Split(s, " ")
-	elfHand := elfHandIndex(splits[0])
-	meHand := playerHand[splits[1]]
+	meHand := playerHand[player]
 
 	outcomeScore := outcomes[elfHand][meHand]
 
@@ -63,27 +61,25 @@ func scoreRound(s string) int {
 }
 
 // produces a score given a target outcome and elf hand
-func scoreHandToOutcome(s string) int {
+func scoreHandToOutcome(elf, target string) int {
 	outcomes := [3][3]int{
 		{3, 6, 0},
 		{0, 3, 6},
 		{6, 0, 3},
 	}
+	elfHand := elfHandIndex(elf)
 
 	targetOutcomes := map[string]int{
 		"X": 0,
 		"Y": 3,
 		"Z": 6,
 	}
-
-	splits := strings.Split(s, " ")
-	elfHand := elfHandIndex(splits[0])
-	target := targetOutcomes[splits[1]]
+	targetScore := targetOutcomes[target]
 
 	// find the outcome given the elf's hand
 	for idx, score := range outcomes[elfHand] {
 		// our hand is the index we found the target outcome in
-		if score == target {
+		if score == targetScore {
 			return score + handScoreFromIndex(idx)
 		}
 	}
@@ -106,7 +102,8 @@ func main() {
 	score = 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		score += scoreHandToOutcome(line)
+		splits := strings.Split(line, " ")
+		score += scoreHandToOutcome(splits[0], splits[1])
 	}
 	fmt.Printf("Score: %d\n", score)
 }
