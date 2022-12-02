@@ -50,8 +50,9 @@ func scoreRound(s string) int {
 	meHand := playerHand[splits[1]]
 
 	outcomeScore := outcomes[elfHand][meHand]
-
-	return outcomeScore + (1 + meHand)
+	handScore := 1 + meHand
+	
+	return outcomeScore + handScore
 }
 
 func main() {
