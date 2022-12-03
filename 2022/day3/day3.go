@@ -6,14 +6,16 @@ import (
 	"os"
 )
 
+// convert from byte value to priority
+// a = 1, b = 2... A = 27 etc.
 func priority(b byte) int {
+	alphabetIndex := int(b) % 32
+
 	if b < 96 {
-		// uppercase characters have double
-		// the priority of lower case ones
-		return (int(b) % 32) + 26
+		return alphabetIndex + 26
 	}
 
-	return int(b) % 32
+	return alphabetIndex
 }
 
 // dual dictionary; store items and frequency, and lookup items
