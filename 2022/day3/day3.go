@@ -52,10 +52,6 @@ func (b *bag) badgeType() byte {
 	return 0
 }
 
-func (b *bag) String() string {
-	return fmt.Sprintf("%v", b.itemsDict)
-}
-
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	counter := 0
