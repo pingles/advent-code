@@ -26,7 +26,7 @@ func newDict(size int) *uniqueDict {
 }
 
 // adds items; will only add item from items once
-func (d *uniqueDict) addItems(items []byte) {
+func (d *uniqueDict) addUniqueItems(items []byte) {
 	// use a dict to make sure we process each from items only once
 	itemsDict := make(map[byte]bool, len(items))
 
@@ -49,7 +49,7 @@ func main() {
 
 	dict := newDict(dictionarySize) // create a dictionary for the group
 	for scanner.Scan() {
-		dict.addItems(scanner.Bytes())
+		dict.addUniqueItems(scanner.Bytes())
 		counter += 1
 
 		if counter == 3 {
