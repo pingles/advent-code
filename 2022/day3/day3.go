@@ -7,8 +7,9 @@ import (
 )
 
 func priority(b byte) int {
-	// uppercase?
 	if b < 96 {
+		// uppercase characters have double
+		// the priority of lower case ones
 		return (int(b) % 32) + 26
 	}
 
