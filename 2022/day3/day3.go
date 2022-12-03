@@ -43,7 +43,7 @@ func (d *dictAndFreq) addUniqueItems(items []byte) {
 		d.d[item] += 1
 		// store the item keyed on its frequency; don't need to worry about clashes
 		// as there's only 1 item at the target frequency
-		d.inverse[d.d[item]] = item // store an inverse dict with frequency
+		d.inverse[d.d[item]] = item
 		itemsDict[item] = true
 	}
 }
