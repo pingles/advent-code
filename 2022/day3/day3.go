@@ -19,12 +19,12 @@ type bag struct {
 	itemsDict map[byte]int
 }
 
-func newBag(s string) *bag {
+func newBag(contents []byte) *bag {
 	// create a dict for each bag; we'll then merge together
 	b := &bag{}
 	b.itemsDict = make(map[byte]int, 52)
 
-	for _, item := range []byte(s) {
+	for _, item := range contents {
 		if b.itemsDict[item] == 0 {
 			b.itemsDict[item] += 1
 		}
@@ -63,8 +63,7 @@ func main() {
 	sumOfPriorities := 0
 
 	for scanner.Scan() {
-		line := scanner.Text()
-		bag := newBag(line)
+		bag := newBag(scanner.Bytes())
 		bags = append(bags, bag)
 		counter += 1
 
