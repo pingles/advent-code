@@ -16,17 +16,22 @@ func priority(b byte) int {
 	return int(b) % 32
 }
 
-// dictionary for lookups. won't count more than once per addition
-type uniqueDict struct {
-	d map[byte]int
+// dual dictionary; store items and frequency, and lookup items
+// and their frequency
+type dictAndFreq struct {
+	d       map[byte]int
+	inverse map[int]byte
 }
 
-func newDict(size int) *uniqueDict {
-	return &uniqueDict{d: make(map[byte]int, size)}
+func newDict(size int) *dictAndFreq {
+	return &dictAndFreq{
+		d:       make(map[byte]int, size),
+		inverse: make(map[int]byte, size),
+	}
 }
 
 // adds items; will only add item from items once
-func (d *uniqueDict) addUniqueItems(items []byte) {
+func (d *dictAndFreq) addUniqueItems(items []byte) {
 	// use a dict to make sure we process each from items only once
 	itemsDict := make(map[byte]bool, len(items))
 
@@ -36,6 +41,9 @@ func (d *uniqueDict) addUniqueItems(items []byte) {
 		}
 
 		d.d[item] += 1
+		// store the item keyed on its frequency; don't need to worry about clashes
+		// as there's only 1 item at the target frequency
+		d.inverse[d.d[item]] = item // store an inverse dict with frequency
 		itemsDict[item] = true
 	}
 }
@@ -53,13 +61,7 @@ func main() {
 		counter += 1
 
 		if counter == 3 {
-			// find the one item thats been counted 3 times
-			for k, v := range dict.d {
-				if v == 3 {
-					sumOfPriorities += priority(k)
-				}
-			}
-
+			sumOfPriorities += priority(dict.inverse[3])
 			counter = 0
 			dict = newDict(dictionarySize)
 		}
