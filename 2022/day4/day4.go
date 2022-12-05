@@ -15,10 +15,24 @@ func parseInterval(s string) (int, int) {
 	return start, end
 }
 
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}
+
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 
-	fullyOverlap := 0
+	anyOverlap := 0
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -27,22 +41,10 @@ func main() {
 		leftStart, leftEnd := parseInterval(intervalExpressions[0])
 		rightStart, rightEnd := parseInterval(intervalExpressions[1])
 
-		if leftStart == rightStart {
-			// start at the same point
-			// they have to overlap
-			fullyOverlap += 1
-		} else if leftStart < rightStart {
-			// is right fully contained in left?
-			if rightEnd <= leftEnd {
-				fullyOverlap += 1
-			}
-		} else {
-			// is left fully contained in right?
-			if leftEnd <= rightEnd {
-				fullyOverlap += 1
-			}
+		if max(leftStart, rightStart) <= min(leftEnd, rightEnd) {
+			anyOverlap += 1
 		}
 	}
 
-	fmt.Println("Overlap:", fullyOverlap)
+	fmt.Println("Overlap:", anyOverlap)
 }
