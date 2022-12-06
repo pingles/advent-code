@@ -25,6 +25,9 @@ func findMarkerIndex(bytes []byte, messageSize int) int {
 			// if we're at 1 each, then we've found a unique run
 			count := 0
 
+			// TODO
+			// this is unnecessary; could add and remove on each item
+			// avoiding multiple loops
 			for j := i; j >= i-(messageSize-1); j-- {
 				count += dict[bytes[j]]
 			}
