@@ -86,10 +86,19 @@ func executeOperation(towers []*tower, bytes []byte) {
 	source, _ := strconv.Atoi(parts[3])
 	dest, _ := strconv.Atoi(parts[5])
 
-	// source and dest are both 1-indexed
+	// create an intermediate list so we can reverse the order
+	// to insert items correctly in a batch
+	itemsToMove := list.New()
+
+	// TODO: avoid needing to use intermediate list
 	for i := 0; i < numberOfItems; i++ {
 		sourceBlocks := towers[source-1].blocks
 		val := sourceBlocks.Remove(sourceBlocks.Front())
+		itemsToMove.PushFront(val)
+	}
+
+	for i := 0; i < numberOfItems; i++ {
+		val := itemsToMove.Remove(itemsToMove.Front())
 		towers[dest-1].blocks.PushFront(val)
 	}
 }
