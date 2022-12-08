@@ -21,22 +21,11 @@ move 2 from 2 to 1
 move 1 from 1 to 2
 */
 
-type tower struct {
-	blocks *list.List
-	id     string
-}
-
-func newTower() *tower {
-	return &tower{
-		blocks: list.New(),
-	}
-}
-
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	readingData := true
 
-	towers := make([]*tower, 0)
+	towers := make([]*list.List, 0)
 
 	for scanner.Scan() {
 		lineBytes := scanner.Bytes()
@@ -48,7 +37,7 @@ func main() {
 				// check we have created enough towers
 				if len(towers) < len(tokens) {
 					for i := len(towers); i < len(tokens); i++ {
-						towers = append(towers, newTower())
+						towers = append(towers, list.New())
 					}
 				}
 
@@ -57,7 +46,7 @@ func main() {
 				// so need to append to the end of the stack
 				for idx, token := range tokens {
 					if token.t == block {
-						towers[idx].blocks.PushBack(token.label)
+						towers[idx].PushBack(token.label)
 					}
 				}
 			}
@@ -75,12 +64,12 @@ func main() {
 	// what's the head
 	labels := make([]string, len(towers))
 	for idx, t := range towers {
-		labels[idx] = t.blocks.Front().Value.(string)
+		labels[idx] = t.Front().Value.(string)
 	}
 	fmt.Println(strings.Join(labels, ""))
 }
 
-func executeOperation(towers []*tower, bytes []byte) {
+func executeOperation(towers []*list.List, bytes []byte) {
 	parts := strings.Split(string(bytes), " ")
 	numberOfItems, _ := strconv.Atoi(parts[1])
 	source, _ := strconv.Atoi(parts[3])
@@ -88,18 +77,17 @@ func executeOperation(towers []*tower, bytes []byte) {
 
 	// create an intermediate list so we can reverse the order
 	// to insert items correctly in a batch
-	itemsToMove := list.New()
+	itemsToMove := make([]string, numberOfItems)
 
 	// TODO: avoid needing to use intermediate list
 	for i := 0; i < numberOfItems; i++ {
-		sourceBlocks := towers[source-1].blocks
-		val := sourceBlocks.Remove(sourceBlocks.Front())
-		itemsToMove.PushFront(val)
+		source := towers[source-1]
+		val := source.Remove(source.Front())
+		itemsToMove[i] = val.(string)
 	}
 
-	for i := 0; i < numberOfItems; i++ {
-		val := itemsToMove.Remove(itemsToMove.Front())
-		towers[dest-1].blocks.PushFront(val)
+	for i := numberOfItems - 1; i >= 0; i-- {
+		towers[dest-1].PushFront(itemsToMove[i])
 	}
 }
 
