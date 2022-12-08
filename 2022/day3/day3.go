@@ -6,40 +6,66 @@ import (
 	"os"
 )
 
+// convert from byte value to priority
+// a = 1, b = 2... A = 27 etc.
 func priority(b byte) int {
-	// uppercase?
+	alphabetIndex := int(b) % 32
+
 	if b < 96 {
-		return (int(b) % 32) + 26
+		return alphabetIndex + 26
 	}
 
-	return int(b) % 32
+	return alphabetIndex
 }
+
+// dual dictionary; store items and frequency, and lookup items
+// and their frequency
+type dictAndFreq struct {
+	d       map[byte]int
+	inverse map[int]byte
+}
+
+func newDict(size int) *dictAndFreq {
+	return &dictAndFreq{
+		d:       make(map[byte]int, size),
+		inverse: make(map[int]byte, size),
+	}
+}
+
+// adds items; will only add item from items once
+func (d *dictAndFreq) addUniqueItems(items []byte) {
+	// use a dict to make sure we process each from items only once
+	itemsDict := make(map[byte]bool, len(items))
+
+	for _, item := range items {
+		if itemsDict[item] {
+			continue // already processed it from this list
+		}
+
+		d.d[item] += 1
+		// store the item keyed on its frequency; don't need to worry about clashes
+		// as there's only 1 item at the target frequency
+		d.inverse[d.d[item]] = item
+		itemsDict[item] = true
+	}
+}
+
+const dictionarySize = 52
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-
+	counter := 0
 	sumOfPriorities := 0
+
+	dict := newDict(dictionarySize) // create a dictionary for the group
 	for scanner.Scan() {
-		line := scanner.Text()
+		dict.addUniqueItems(scanner.Bytes())
+		counter += 1
 
-		// break contents into 2 compartments
-		left := line[:len(line)/2]
-		right := line[len(line)/2:]
-
-		// use a dictionary to hold counts of each character
-		dict := make(map[byte]int, 52)
-
-		// store values for all of one compartment
-		for i := 0; i < len(right); i++ {
-			dict[right[i]] = 1
-		}
-
-		for i := 0; i < len(left); i++ {
-			if dict[left[i]] == 1 {
-				// found our item
-				sumOfPriorities += priority(left[i])
-				break
-			}
+		if counter == 3 {
+			sumOfPriorities += priority(dict.inverse[3])
+			counter = 0
+			dict = newDict(dictionarySize)
 		}
 	}
 
