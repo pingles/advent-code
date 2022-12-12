@@ -11,14 +11,13 @@ import (
 
 type directory struct {
 	childDirectories map[string]*directory
-	files            []int
+	sizeOfFiles      int
 	parent           *directory
 }
 
 func newDirectory() *directory {
 	return &directory{
 		childDirectories: make(map[string]*directory),
-		files:            make([]int, 0),
 	}
 }
 
@@ -30,7 +29,7 @@ func (d *directory) addChildDirectory(name string) *directory {
 }
 
 func (d *directory) addFile(size int) {
-	d.files = append(d.files, size)
+	d.sizeOfFiles += size
 }
 
 // changes to sub directory
@@ -42,10 +41,7 @@ func (d *directory) cd(s string) *directory {
 }
 
 func (d *directory) size() int {
-	sum := 0
-	for _, f := range d.files {
-		sum += f
-	}
+	sum := d.sizeOfFiles
 	for _, v := range d.childDirectories {
 		sum += v.size()
 	}
