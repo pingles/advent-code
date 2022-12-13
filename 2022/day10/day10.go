@@ -33,7 +33,7 @@ func main() {
 			interestingCounter--
 		}
 
-		instructionCompleted := currentInstruction.execute(registers)
+		instructionCompleted := currentInstruction.apply(registers)
 		//fmt.Printf("[%d] %v: %s\n", cycleCounter, registers, currentInstruction)
 
 		if instructionCompleted {
@@ -68,7 +68,7 @@ type instruction struct {
 	cyclesRemaining int // how many cycles are left to complete this instruction
 }
 
-func (i *instruction) execute(r *registers) bool {
+func (i *instruction) apply(r *registers) bool {
 	i.cyclesRemaining--
 	if i.cyclesRemaining > 0 {
 		return false
